@@ -1,23 +1,52 @@
-import logo from './logo.svg';
+
+import { useEffect, useState } from 'react';
 import './App.css';
+import DeteiledPlan from './Detailed-plan';
+import MyList from './MyList';
+import uuid from 'react-uuid';
 
 function App() {
+
+const [mealPlan, setMealPlan]=useState(localStorage.mealPlan ? JSON.parse(localStorage.mealPlan) : []);
+const [selectedDay, setSelectedDay] = useState(false)
+
+useEffect(()=>{
+  localStorage.setItem("mealPlan", JSON.stringify(mealPlan))
+}, [mealPlan])
+
+const addMeal=()=>{
+  const newMeal ={
+    title: "today is",
+    mealForDay : "",
+    ingredients: "",
+    id: uuid()
+  }
+  setMealPlan([newMeal, ...mealPlan])
+}
+
+
+const deleteDay=(i)=>{
+setMealPlan(mealPlan.filter(({id})=>id !==i))
+}
+
+const updateDay =(myUpdateMeal)=>{
+const updatedMeals = mealPlan.map((mealPlan)=>{
+  if (mealPlan.id ===myUpdateMeal.id){return myUpdateMeal}
+  return mealPlan
+})
+setMealPlan(updatedMeals)
+}
+
+const getActiv = () => {
+  return mealPlan.find(({id})=>id === selectedDay)
+}
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <MyList addMeal={addMeal} mealPlan={mealPlan} deleteDay={deleteDay}
+     selectedDay={selectedDay} setSelectedDay={setSelectedDay}/>
+     <DeteiledPlan selectedDay={getActiv()} updateDay={updateDay}/>
     </div>
   );
 }
