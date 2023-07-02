@@ -44,9 +44,10 @@ const getActiv = () => {
 
   return (
     <div className="App">
+      <DeteiledPlan selectedDay={getActiv()} updateDay={updateDay}/>
      <MyList addMeal={addMeal} mealPlan={mealPlan} deleteDay={deleteDay}
      selectedDay={selectedDay} setSelectedDay={setSelectedDay}/>
-     <DeteiledPlan selectedDay={getActiv()} updateDay={updateDay}/>
+     
     </div>
   );
 }
